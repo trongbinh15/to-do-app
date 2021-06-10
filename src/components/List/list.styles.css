@@ -1,0 +1,12 @@
+.container {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 20px;
+  height: 100vh;
+}
+
+.container>.list-item {
+  background-color: lightcyan;
+  padding: 30px;
+}

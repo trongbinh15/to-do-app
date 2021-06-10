@@ -1,0 +1,25 @@
+.item-container{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  position:relative;
+  }
+
+.item-container > .check-box{
+  margin: 0 10px ;
+}
+
+.item-container > * {
+  line-height: 2rem;
+}
+
+/* .item-container::after {
+  content: '❌';
+  position: absolute;
+  right: 0;
+  transition: all 0.3s ease;
+} */
+
+.item-container:hover {
+}
