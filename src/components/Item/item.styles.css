@@ -1,25 +1,49 @@
-.item-container{
+.item-container {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  position:relative;
-  }
+  position: relative;
+  margin: 5px 0;
+  line-height: 2rem;
+}
 
 .item-container > .check-box{
   margin: 0 10px ;
 }
 
-.item-container > * {
-  line-height: 2rem;
+.item-container > .item-name {
+  max-width: calc(100% - 100px);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-/* .item-container::after {
-  content: '❌';
-  position: absolute;
-  right: 0;
-  transition: all 0.3s ease;
-} */
+.item-container > .is-complete {
+  text-decoration: line-through;
+  color: gray;
+}
 
-.item-container:hover {
+.item-container > .movable {
+  opacity: 0;
+  transition: all 0.1s ease;
+}
+
+.item-container:hover .movable{
+  opacity: 1;
+} 
+
+.actions {
+  position: absolute;
+  right: 10px;
+  opacity: 0;
+  transition: all 0.1s ease; 
+}
+
+.item-container:hover .actions{
+  opacity: 1;
+}
+
+.actions > * {
+  margin-right: 10px;
 }

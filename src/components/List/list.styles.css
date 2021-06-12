@@ -1,12 +1,23 @@
-.container {
-  display: grid;
-  place-items: center;
-  margin: 0;
-  padding: 20px;
-  height: 100vh;
+.list-item {
+  border: 1px solid gray;
+  border-radius: 25px;
+  padding: 30px;
+  max-width: 40vw;
+  width: 100%;
+  min-width: 300px;
+}
+.add-section {
+	display: flex;	
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
-.container>.list-item {
-  background-color: lightcyan;
-  padding: 30px;
+.add-section > btn {
+  display: inline-block;
+  font-size: 1.5rem;
+}
+
+.add-section > .is-adding{
+  display: none;
 }

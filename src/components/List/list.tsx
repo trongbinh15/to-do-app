@@ -1,54 +1,77 @@
+import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react'
 import { ItemModel } from '../../models/item.model';
-import Item from '../Item/item';
+import ItemComponent from '../Item/item';
 import './list.styles.css'
+import { v4 as uuidv4 } from 'uuid';
 
 type State = {
   items: ItemModel[];
-  header?: string;
+  isAdding: boolean;
 }
 
-export class List extends Component<{}, State> {
+export class ListComponent extends Component<{}, State> {
   constructor(props = {}) {
     super(props);
     this.state = {
       items:
         [
           {
-            id: 1,
+            id: '1',
             name: 'John',
-            isComplete: true
+            isComplete: true,
+            isEdit: false
           },
           {
-            id: 2,
-            name: 'Nana',
-            isComplete: false
+            id: '2',
+            name: 'Nanaaaaaaaaaaaaaaaaaaaaaaaaa',
+            isComplete: false,
+            isEdit: false
           },
           {
-            id: 3,
+            id: '3',
             name: 'Tuna',
-            isComplete: true
+            isComplete: true,
+            isEdit: false
           }
         ],
-      header: 'To Do List',
+      isAdding: false
     }
   }
 
   draggedItem: ItemModel | null = null;
 
-  onDelete = (id: number) => {
+  onDelete = (id: string) => {
     // this.items.splice(this.items.findIndex(item => item.id === id), 1);
     this.setState(prev => ({
       // eslint-disable-next-line no-labels
       items: prev.items.filter(item => item.id !== id)
     }));
+    this.setState({isAdding: false});
   }
 
-  onChangeStatus = (id: number) => {
+  onChangeStatus = (id: string) => {
     this.setState(prev => ({
       // eslint-disable-next-line no-labels
       items: prev.items.map(item => item.id === id ? { ...item, isComplete: !item.isComplete } : item)
     }));
+  }
+
+  onToggleEdit = (id: string) => {
+    this.setState(prev => ({
+      // eslint-disable-next-line no-labels
+      items: prev.items.map(item => item.id === id ? { ...item, isEdit: !item.isEdit } : item)
+    }));
+  }
+
+  onChangeName = (id: string, value: string) => {
+      this.setState(prev => ({
+        // eslint-disable-next-line no-labels
+        items: prev.items.map(item => item.id === id ? { ...item, name: value } : item)
+      }));
+
+    this.setState({isAdding: false});
   }
 
   onDragStart = (e: any, index?: number) => {
@@ -85,20 +108,42 @@ export class List extends Component<{}, State> {
   };
 
 
+  onAddNewItem = () => {
+    this.setState(prev => ({
+      // eslint-disable-next-line no-labels
+      items: [...prev.items,{
+        id: uuidv4(),
+        isComplete: false,
+        isEdit: true,
+        name: ''
+      }],
+    }));
+
+    this.setState({isAdding: true});
+  }
+
+
   render() {
     return (
       <>
-        <div className="container">
-          <div className='list-item'>
-            <h1>{this.state.header}</h1>
-            {this.state.items.map((item, index) =>
-              <Item key={item.id}
+        <div className='list-item'>
+          {this.state.items.length === 0 ? <div>Nothing to do</div> :
+            this.state.items.map((item, index) =>
+              <ItemComponent key={item.id}
                 item={item}
                 onChangeStatus={() => this.onChangeStatus(item.id)}
+                onToggleEdit={() => this.onToggleEdit(item.id)}
+                onChangeName={(value) => this.onChangeName(item.id, value)}
                 onDragStart={(e) => this.onDragStart(e, index)}
                 onDragOver={(e) => this.onDragOver(e, index)}
                 onDragEnd={() => this.onDragEnd}
                 onDelete={this.onDelete} />)}
+          <div className="add-section">
+            <FontAwesomeIcon
+              icon={faPlusCircle}
+              size='lg'
+              className={`btn add-btn + ${this.state.isAdding ? 'is-adding' : ''}`}
+              onClick={this.onAddNewItem} />
           </div>
         </div>
       </>
@@ -106,4 +151,4 @@ export class List extends Component<{}, State> {
   }
 }
 
-export default List;
+export default ListComponent;

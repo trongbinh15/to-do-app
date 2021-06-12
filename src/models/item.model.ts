@@ -1,5 +1,6 @@
 export interface ItemModel {
-  id: number;
+  id: string;
   name: string;
   isComplete: boolean;
+  isEdit: boolean;
 }

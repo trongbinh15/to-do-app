@@ -1,12 +1,15 @@
 import './App.css';
 import { Component } from 'react';
-import List from './components/List/list';
+import ListComponent from './components/List/list';
 class App extends Component {
   render() {
     return (
       <>
-        <List>
-        </List>
+        <div className="container">
+          <h1>To do list</h1>
+          <ListComponent>
+          </ListComponent>
+        </div>
       </>
     );
   };
