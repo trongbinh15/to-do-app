@@ -34,22 +34,20 @@ export class ItemComponent extends Component<Prop> {
   handleOnDragStart = (e: any) => this.props.onDragStart(e);
   handleOnDragEnd = (e: any) => this.props.onDragOver(e);
 
+  handleKeyPress = (ev: React.KeyboardEvent<HTMLInputElement>) => {
+    if (ev.code === 'Enter') {
+      this.updateName();
+    }
+  }
+
   shouldComponentUpdate(nextProp: Prop) {
     return (this.props.item.isComplete !== nextProp.item.isComplete) 
     || (this.props.item.isEdit !== nextProp.item.isEdit)
     || (this.props.item.name !== nextProp.item.name)
   }
 
-
-  handleEnterPress = (ev: React.KeyboardEvent<HTMLInputElement>) => {
-    if (ev.key === 'Enter') {
-      this.updateName();
-    }
-  }
-
   componentDidUpdate(){
     this.ref.current?.focus();
-    this.ref.current?.addEventListener('keydown', ()=> {console.log(this.ref.current?.value)});
   }
 
   componentDidMount(){
@@ -63,6 +61,7 @@ export class ItemComponent extends Component<Prop> {
     return (
       <div className="item-container">
         <div className="movable" 
+          title="Move"
           onDragStart={this.handleOnDragStart}
           onDragOver={this.handleOnDragEnd}
           onDragEnd={this.handleOnDragEnd} draggable>
@@ -78,16 +77,16 @@ export class ItemComponent extends Component<Prop> {
             className="item-name"
             defaultValue={this.props.item.name}
             ref={this.ref}
-            onKeyPress={this.handleEnterPress}
+            onKeyPress={this.handleKeyPress}
           /> :
           <div className={`item-name ${this.props.item.isComplete ? 'is-complete' : ''} `}>{this.props.item.name}</div>
         }
         <div className="actions">
         {this.props.item.isEdit ? 
-          <FontAwesomeIcon icon={faCheck} className="btn done" onClick={this.updateName}/>
-            : <FontAwesomeIcon icon={faEdit} className="btn edit" onClick={this.toggleEdit} />
+          <FontAwesomeIcon icon={faCheck} className="btn done" onClick={this.updateName} title="Complete"/>
+            : <FontAwesomeIcon icon={faEdit} className="btn edit" onClick={this.toggleEdit} title="Edit" />
           }
-          <FontAwesomeIcon icon={faTrash} className="btn delete" onClick={this.handleDeleteEvent} title='Move'/>
+          <FontAwesomeIcon icon={faTrash} className="btn delete" onClick={this.handleDeleteEvent} title='Delete'/>
         </div>
       </div>
     )

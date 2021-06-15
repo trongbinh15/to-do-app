@@ -42,6 +42,12 @@ export class ListComponent extends Component<{}, State> {
 
   draggedItem: ItemModel | null = null;
 
+  handleKeyPress = (ev: KeyboardEvent) => {
+    if (ev.code === 'Space') {
+      this.onAddNewItem();
+    }
+  }
+
   onDelete = (id: string) => {
     this.setState(prev => ({
       // eslint-disable-next-line no-labels
@@ -108,6 +114,7 @@ export class ListComponent extends Component<{}, State> {
 
 
   onAddNewItem = () => {
+    if (this.state.isAdding) return;
     this.setState(prev => ({
       // eslint-disable-next-line no-labels
       items: [...prev.items,{
@@ -118,9 +125,16 @@ export class ListComponent extends Component<{}, State> {
       }],
     }));
 
-    this.setState({isAdding: true});
+    this.setState({ isAdding: true });
   }
 
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyPress)
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('keydown', this.handleKeyPress)
+  }
 
   render() {
     return (
@@ -142,6 +156,7 @@ export class ListComponent extends Component<{}, State> {
               icon={faPlusCircle}
               size='lg'
               className={`btn add-btn + ${this.state.isAdding ? 'is-adding' : ''}`}
+              title="Press Space to Add"
               onClick={this.onAddNewItem} />
           </div>
         </div>
