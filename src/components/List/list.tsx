@@ -43,7 +43,6 @@ export class ListComponent extends Component<{}, State> {
   draggedItem: ItemModel | null = null;
 
   onDelete = (id: string) => {
-    // this.items.splice(this.items.findIndex(item => item.id === id), 1);
     this.setState(prev => ({
       // eslint-disable-next-line no-labels
       items: prev.items.filter(item => item.id !== id)

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, createRef, DragEventHandler } from 'react'
 import { ItemModel } from '../../models/item.model';
 import './item.styles.css'
+
 type Prop = {
   item: ItemModel;
   onDelete: (id: string) => void;
@@ -39,13 +40,25 @@ export class ItemComponent extends Component<Prop> {
     || (this.props.item.name !== nextProp.item.name)
   }
 
+
+  handleEnterPress = (ev: KeyboardEvent) => {
+    if (ev.key === 'Enter') {
+      this.updateName();
+    }
+  }
+
   componentDidUpdate(){
     this.ref.current?.focus();
+    this.ref.current?.addEventListener('keydown', this.handleEnterPress);
   }
+
   componentDidMount(){
     this.ref.current?.focus();
   }
 
+  componentWillUnmount(){
+    this.ref.current?.removeEventListener('keydown', this.handleEnterPress);
+  }
 
   render() {
     return (
