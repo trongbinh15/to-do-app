@@ -41,7 +41,7 @@ export class ItemComponent extends Component<Prop> {
   }
 
 
-  handleEnterPress = (ev: KeyboardEvent) => {
+  handleEnterPress = (ev: React.KeyboardEvent<HTMLInputElement>) => {
     if (ev.key === 'Enter') {
       this.updateName();
     }
@@ -49,7 +49,7 @@ export class ItemComponent extends Component<Prop> {
 
   componentDidUpdate(){
     this.ref.current?.focus();
-    this.ref.current?.addEventListener('keydown', this.handleEnterPress);
+    this.ref.current?.addEventListener('keydown', ()=> {console.log(this.ref.current?.value)});
   }
 
   componentDidMount(){
@@ -57,7 +57,6 @@ export class ItemComponent extends Component<Prop> {
   }
 
   componentWillUnmount(){
-    this.ref.current?.removeEventListener('keydown', this.handleEnterPress);
   }
 
   render() {
@@ -75,7 +74,12 @@ export class ItemComponent extends Component<Prop> {
           onChange={this.handleChangeStatueEvent} />
 
         {this.props.item.isEdit ?
-          <input type="text" className="item-name" defaultValue={this.props.item.name} ref={this.ref} /> :
+          <input type="text"
+            className="item-name"
+            defaultValue={this.props.item.name}
+            ref={this.ref}
+            onKeyPress={this.handleEnterPress}
+          /> :
           <div className={`item-name ${this.props.item.isComplete ? 'is-complete' : ''} `}>{this.props.item.name}</div>
         }
         <div className="actions">
@@ -83,7 +87,7 @@ export class ItemComponent extends Component<Prop> {
           <FontAwesomeIcon icon={faCheck} className="btn done" onClick={this.updateName}/>
             : <FontAwesomeIcon icon={faEdit} className="btn edit" onClick={this.toggleEdit} />
           }
-          <FontAwesomeIcon icon={faTrash} className="btn delete" onClick={this.handleDeleteEvent}/>
+          <FontAwesomeIcon icon={faTrash} className="btn delete" onClick={this.handleDeleteEvent} title='Move'/>
         </div>
       </div>
     )
