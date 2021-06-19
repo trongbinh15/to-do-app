@@ -1,34 +1,22 @@
 {
   "items": [
     {
-      "id": 1,
-      "name": "json-server",
-      "isComplete": true,
-      "isEdit": false
-    },
-    {
-      "id": "2",
-      "name": "hello",
-      "isComplete": false,
-      "isEdit": false
-    },
-    {
       "id": "7daa5474-cce3-481c-a426-0a1956b33119",
       "name": "Ahihi",
-      "isComplete": true,
-      "isEdit": false
-    },
-    {
-      "id": "9a712564-a736-4b55-a882-18703359546c",
       "isComplete": false,
-      "isEdit": true,
-      "name": " asd"
+      "isEdit": false
     },
     {
       "id": "0491de30-ceba-4a6c-a975-93bd81534eb4",
-      "name": " Pokemon",
+      "name": " Pokemon A",
       "isComplete": true,
-      "isEdit": false
+      "isEdit": true
+    },
+    {
+      "id": "982619b9-a947-4c01-8594-e76bd513144c",
+      "isComplete": false,
+      "isEdit": true,
+      "name": " Tuna"
     }
   ],
   "users": [

@@ -48,11 +48,16 @@ export class ListComponent extends Component<{}, State> {
     const currentItem = this.state.items.find(x => x.id === id);
     if (currentItem) {
       axios.put(localApi.updateItem.replace('{id}', id), { ...currentItem, isComplete: !currentItem.isComplete })
-      this.setState({ isAdding: false });
     }
+    this.setState({ isAdding: false });
   }
 
   onToggleEdit = (id: string) => {
+    const currentItem = this.state.items.find(x => x.id === id);
+    if (currentItem?.isEdit === false) {
+      this.setState({ isAdding: true })
+    };
+
     this.setState(prev => ({
       // eslint-disable-next-line no-labels
       items: prev.items.map(item => item.id === id ? { ...item, isEdit: !item.isEdit } : item)
@@ -68,9 +73,8 @@ export class ListComponent extends Component<{}, State> {
     const currentItem = this.state.items.find(x => x.id === id);
     if (currentItem) {
       axios.put(localApi.updateItem.replace('{id}', id), { ...currentItem, name: value })
-      this.setState({ isAdding: false });
     }
-
+    this.setState({ isAdding: false });
   }
 
   onDragStart = (e: any, index?: number) => {
