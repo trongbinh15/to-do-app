@@ -1,11 +1,11 @@
 import { faBars, faCheck, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component, createRef, DragEventHandler } from 'react'
-import { ItemModel } from '../../models/item.model';
+import { IItem } from '../../models/item.model';
 import './item.styles.css'
 
 type Prop = {
-  item: ItemModel;
+  item: IItem;
   onDelete: (id: string) => void;
   onChangeStatus: () => void;
   onToggleEdit: () => void;
@@ -41,32 +41,32 @@ export class ItemComponent extends Component<Prop> {
   }
 
   shouldComponentUpdate(nextProp: Prop) {
-    return (this.props.item.isComplete !== nextProp.item.isComplete) 
-    || (this.props.item.isEdit !== nextProp.item.isEdit)
-    || (this.props.item.name !== nextProp.item.name)
+    return (this.props.item.isComplete !== nextProp.item.isComplete)
+      || (this.props.item.isEdit !== nextProp.item.isEdit)
+      || (this.props.item.name !== nextProp.item.name)
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
     this.ref.current?.focus();
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.ref.current?.focus();
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
   }
 
   render() {
     return (
       <div className="item-container">
-        <div className="movable" 
+        <div className="movable"
           title="Move"
           onDragStart={this.handleOnDragStart}
           onDragOver={this.handleOnDragEnd}
           onDragEnd={this.handleOnDragEnd} draggable>
-          <FontAwesomeIcon icon={faBars} className="btn"/>
-          </div>
+          <FontAwesomeIcon icon={faBars} className="btn" />
+        </div>
         <input type="checkbox"
           className="check-box"
           defaultChecked={this.props.item.isComplete}
@@ -82,11 +82,11 @@ export class ItemComponent extends Component<Prop> {
           <div className={`item-name ${this.props.item.isComplete ? 'is-complete' : ''} `}>{this.props.item.name}</div>
         }
         <div className="actions">
-        {this.props.item.isEdit ? 
-          <FontAwesomeIcon icon={faCheck} className="btn done" onClick={this.updateName} title="Complete"/>
+          {this.props.item.isEdit ?
+            <FontAwesomeIcon icon={faCheck} className="btn done" onClick={this.updateName} title="Complete" />
             : <FontAwesomeIcon icon={faEdit} className="btn edit" onClick={this.toggleEdit} title="Edit" />
           }
-          <FontAwesomeIcon icon={faTrash} className="btn delete" onClick={this.handleDeleteEvent} title='Delete'/>
+          <FontAwesomeIcon icon={faTrash} className="btn delete" onClick={this.handleDeleteEvent} title='Delete' />
         </div>
       </div>
     )

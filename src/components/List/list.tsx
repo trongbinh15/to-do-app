@@ -1,10 +1,12 @@
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react'
-import { ItemModel } from '../../models/item.model';
+import { IItem, ItemModel } from '../../models/item.model';
 import ItemComponent from '../Item/item';
 import './list.styles.css'
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
+import { localApi } from '../../config/api';
 
 type State = {
   items: ItemModel[];
@@ -15,27 +17,7 @@ export class ListComponent extends Component<{}, State> {
   constructor(props = {}) {
     super(props);
     this.state = {
-      items:
-        [
-          {
-            id: '1',
-            name: 'John',
-            isComplete: true,
-            isEdit: false
-          },
-          {
-            id: '2',
-            name: 'Nanaaaaaaaaaaaaaaaaaaaaaaaaa',
-            isComplete: false,
-            isEdit: false
-          },
-          {
-            id: '3',
-            name: 'Tuna',
-            isComplete: true,
-            isEdit: false
-          }
-        ],
+      items: [],
       isAdding: false
     }
   }
@@ -53,7 +35,8 @@ export class ListComponent extends Component<{}, State> {
       // eslint-disable-next-line no-labels
       items: prev.items.filter(item => item.id !== id)
     }));
-    this.setState({isAdding: false});
+    axios.delete(localApi.deleteItem.replace('{id}', id))
+    this.setState({ isAdding: false });
   }
 
   onChangeStatus = (id: string) => {
@@ -61,6 +44,12 @@ export class ListComponent extends Component<{}, State> {
       // eslint-disable-next-line no-labels
       items: prev.items.map(item => item.id === id ? { ...item, isComplete: !item.isComplete } : item)
     }));
+
+    const currentItem = this.state.items.find(x => x.id === id);
+    if (currentItem) {
+      axios.put(localApi.updateItem.replace('{id}', id), { ...currentItem, isComplete: !currentItem.isComplete })
+      this.setState({ isAdding: false });
+    }
   }
 
   onToggleEdit = (id: string) => {
@@ -71,12 +60,17 @@ export class ListComponent extends Component<{}, State> {
   }
 
   onChangeName = (id: string, value: string) => {
-      this.setState(prev => ({
-        // eslint-disable-next-line no-labels
-        items: prev.items.map(item => item.id === id ? { ...item, name: value } : item)
-      }));
+    this.setState(prev => ({
+      // eslint-disable-next-line no-labels
+      items: prev.items.map(item => item.id === id ? { ...item, name: value } : item)
+    }));
 
-    this.setState({isAdding: false});
+    const currentItem = this.state.items.find(x => x.id === id);
+    if (currentItem) {
+      axios.put(localApi.updateItem.replace('{id}', id), { ...currentItem, name: value })
+      this.setState({ isAdding: false });
+    }
+
   }
 
   onDragStart = (e: any, index?: number) => {
@@ -115,24 +109,40 @@ export class ListComponent extends Component<{}, State> {
 
   onAddNewItem = () => {
     if (this.state.isAdding) return;
+    const newId = uuidv4();
     this.setState(prev => ({
       // eslint-disable-next-line no-labels
-      items: [...prev.items,{
-        id: uuidv4(),
+      items: [...prev.items, {
+        id: newId,
         isComplete: false,
         isEdit: true,
         name: ''
       }],
     }));
 
+    const newItem = {
+      id: newId,
+      isComplete: false,
+      name: ''
+    };
+
+    axios.post(localApi.addItem, newItem)
     this.setState({ isAdding: true });
   }
 
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyPress)
+
+    axios.get<IItem[]>(localApi.getAllItems).then(
+      items => {
+        this.setState({
+          items: items.data.map(x => new ItemModel(x))
+        })
+      }
+    );
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeyPress)
   }
 
