@@ -16,7 +16,7 @@ type Prop = {
 };
 
 export class ItemComponent extends Component<Prop> {
-  private ref: React.RefObject<HTMLInputElement>;
+  ref: React.RefObject<HTMLInputElement>;
   constructor(props: Prop) {
     super(props);
     this.ref = createRef();

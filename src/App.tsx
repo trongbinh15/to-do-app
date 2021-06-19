@@ -7,6 +7,8 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
+import UserList from './components/UserList/user-list';
+import UserDetail from './components/UserDetail/user-detail';
 class App extends Component {
   render() {
     return (
@@ -25,14 +27,10 @@ class App extends Component {
           </ul>
         </nav>
         <Switch>
-          <Route path="/list">
-            <h1>To do list</h1>
-            <ListComponent>
-            </ListComponent>
+          <Route path="/list" component={ListComponent} />
+          <Route exact path="/users" component={UserList} />
+          <Route path="/users/:id" component={UserDetail}>
           </Route>
-          {/* <Route path="/users">
-            <Users />
-          </Route> */}
           <Route exact path="/">
             <Redirect to="/list" />
           </Route>
