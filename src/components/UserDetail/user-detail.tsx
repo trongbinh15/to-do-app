@@ -1,23 +1,24 @@
-import axios from 'axios'
 import React, { Component, createRef } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { localApi } from '../../config/api'
 import { IUser } from '../../models/user.model'
 import './user-detail.style.css'
 import { v4 as uuidv4 } from 'uuid';
+import { RootState } from '../../store/store'
+import { connect, ConnectedProps } from 'react-redux'
+import { addUserAsync, deleteUserAsync, updateUserAsync } from '../../store/slices/usersSlice';
 
 type State = {
   user: IUser | null;
   isNew: boolean;
 }
 
-export class UserDetail extends Component<RouteComponentProps, State> {
+export class UserDetail extends Component<PropsFromRedux, State> {
 
   nameRef: React.RefObject<HTMLInputElement>;
   phoneRef: React.RefObject<HTMLInputElement>;
   emailRef: React.RefObject<HTMLInputElement>;
 
-  constructor(props: RouteComponentProps) {
+  constructor(props: PropsFromRedux) {
     super(props);
     this.state = {
       user: null,
@@ -29,14 +30,15 @@ export class UserDetail extends Component<RouteComponentProps, State> {
   }
 
   componentDidMount() {
-    console.log(this.props)
+    this.nameRef.current?.focus();
     const { id } = this.props.match.params as any;
     if (id !== 'new') {
       this.setState({ isNew: false });
+      const user = this.props.users.find(x => x.id === id);
+      if (user) {
+        this.setState({ user: user });
+      }
 
-      axios.get(localApi.getUserById.replace('{id}', id)).then(res => {
-        this.setState({ user: res.data })
-      })
     } else if (id === 'new') {
       this.setState({ isNew: true });
     }
@@ -56,11 +58,9 @@ export class UserDetail extends Component<RouteComponentProps, State> {
     }
 
     if (this.state.isNew) {
-      axios.post<IUser>(localApi.addUser, model)
-        .then(u => this.updateUserState(u.data))
+      this.props.addUserAsync(model);
     } else if (!this.state.isNew) {
-      axios.put<IUser>(localApi.updateUser.replace('{id}', model.id), model)
-        .then(u => this.updateUserState(u.data))
+      this.props.updateUserAsync(model);
     }
 
     this.onBack();
@@ -109,4 +109,20 @@ export class UserDetail extends Component<RouteComponentProps, State> {
   }
 }
 
-export default UserDetail
+const mapState = (state: RootState, ownProps: RouteComponentProps) => ({
+  users: state.users.users,
+  match: ownProps.match,
+  history: ownProps.history
+})
+
+const mapDispatch = {
+  deleteUserAsync,
+  addUserAsync,
+  updateUserAsync
+}
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(UserDetail);

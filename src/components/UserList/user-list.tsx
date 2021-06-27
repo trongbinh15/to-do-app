@@ -1,37 +1,16 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios'
-import React, { Component } from 'react'
+import { Component } from 'react'
 import { Link, RouteComponentProps } from 'react-router-dom'
-import { localApi } from '../../config/api'
-import { IUser } from '../../models/user.model'
+import { RootState } from '../../store/store'
 import './user-list.style.css'
 
-type State = {
-  users: IUser[];
-}
+import { deleteUserAsync } from '../../store/slices/usersSlice';
+import { connect, ConnectedProps } from 'react-redux'
 
-export class UserList extends Component<RouteComponentProps, State> {
-  constructor(props: RouteComponentProps) {
-    super(props);
-    this.state = {
-      users: []
-    }
-  }
-
-  componentDidMount() {
-    axios.get<IUser[]>(localApi.getAllUsers).then(res => {
-      this.setState({ users: res.data })
-    });
-  }
-
+export class UserList extends Component<PropsFromRedux, any> {
   deleteUser = (id: string) => {
-    axios.delete(localApi.deleteUser.replace('{id}', id)).then(() => {
-      this.setState(prev => ({
-        users: prev.users.filter(u => u.id !== id)
-      }))
-    }
-    )
+    this.props.deleteUserAsync(id);
   }
 
   render() {
@@ -54,7 +33,7 @@ export class UserList extends Component<RouteComponentProps, State> {
               </tr>
             </thead>
             <tbody>
-              {this.state.users.map(user =>
+              {this.props.users.map(user =>
                 <tr key={user.id}>
                   <td>{user.name}</td>
                   <td>{user.phone}</td>
@@ -76,4 +55,17 @@ export class UserList extends Component<RouteComponentProps, State> {
   }
 }
 
-export default UserList
+const mapState = (state: RootState, ownProps: RouteComponentProps) => ({
+  users: state.users.users,
+  match: ownProps.match
+})
+
+const mapDispatch = {
+  deleteUserAsync
+}
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(UserList);

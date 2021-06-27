@@ -1,12 +1,6 @@
 {
   "db_items": [
     {
-      "id": "33a309ca-ffe0-47d7-8af2-71806e5eb44a",
-      "name": "style the nav ",
-      "isComplete": true,
-      "isEdit": false
-    },
-    {
       "id": "b3e36a6b-f254-4f10-8e0b-44b11f2d4952",
       "isComplete": false,
       "isEdit": true,
@@ -21,28 +15,22 @@
   ],
   "db_users": [
     {
-      "id": "02",
-      "email": "b@gmail.com",
-      "phone": "091",
-      "name": "User A"
-    },
-    {
-      "id": "03",
-      "email": "c@gmail.com",
-      "phone": "095",
-      "name": "User E"
-    },
-    {
-      "id": "407e835c-8773-4647-9bc0-6560d03b5d86",
-      "email": "ty@gmail.com",
-      "phone": "098",
-      "name": "Bu"
-    },
-    {
       "id": "f3a04dd7-b179-456e-831c-5a5b0ff03351",
       "email": "sfhdsf",
       "phone": "123",
-      "name": "Tuna"
+      "name": "Tunaa B"
+    },
+    {
+      "id": "7be373a6-d143-4f79-8517-bc1744288aa5",
+      "email": "trongbinhnguyen15@gmail.com",
+      "phone": "+84359984971",
+      "name": "Trong Binh"
+    },
+    {
+      "id": "891084de-6f35-46c3-ba73-70daa954fb22",
+      "email": "trongbinhnguyen15@gmail.com",
+      "phone": "+84359984971",
+      "name": "Trong Binh22"
     }
   ]
 }

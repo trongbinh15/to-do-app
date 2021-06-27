@@ -1,6 +1,5 @@
 import './App.css';
 import { Component } from 'react';
-import ListComponent from './components/List/list';
 import {
   Switch,
   Route,
@@ -9,17 +8,20 @@ import {
 } from "react-router-dom";
 import UserList from './components/UserList/user-list';
 import UserDetail from './components/UserDetail/user-detail';
-class App extends Component {
+import { RootState } from './store/store';
+import { fetchUsersAsync } from './store/slices/usersSlice';
+import { connect, ConnectedProps } from 'react-redux';
+class App extends Component<PropsFromRedux> {
+  componentDidMount() {
+    this.props.fetchUsersAsync();
+  }
   render() {
     return (
       <div className="container">
         <nav>
           <ul>
             <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/list">Todo List</Link>
+              <Link to="/users">Home</Link>
             </li>
             <li>
               <Link to="/users">Users</Link>
@@ -27,7 +29,6 @@ class App extends Component {
           </ul>
         </nav>
         <Switch>
-          <Route path="/list" component={ListComponent} />
           <Route exact path="/users" component={UserList} />
           <Route path="/users/:id" component={UserDetail}>
           </Route>
@@ -43,4 +44,16 @@ class App extends Component {
   };
 }
 
-export default App;
+const mapState = (state: RootState) => ({
+  counter: state.users
+})
+
+const mapDispatch = {
+  fetchUsersAsync
+}
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(App);
