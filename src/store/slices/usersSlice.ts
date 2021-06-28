@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { localApi } from '../../config/api';
 import { IUser } from '../../models/user.model';
@@ -97,5 +97,17 @@ const usersSlice = createSlice({
 			})
 	}
 });
+
+const usersSelector = (state: UserState) => state.users;
+const userByIdSelector = (_: UserState, id: string) => id;
+
+export const uniqueUsersSelector = () => createSelector(usersSelector,
+	(users) => users
+);
+
+export const uniqueUserByIdSelector = () => createSelector(usersSelector, userByIdSelector,
+	(users, id) => users.find(x => x.id === id)
+);
+
 
 export default usersSlice.reducer;

@@ -1,15 +1,21 @@
 import React, { Component, createRef } from 'react'
-import { RouteComponentProps } from 'react-router-dom'
+import { Link, RouteComponentProps } from 'react-router-dom'
 import { IUser } from '../../models/user.model'
 import './user-detail.style.css'
 import { v4 as uuidv4 } from 'uuid';
 import { RootState } from '../../store/store'
 import { connect, ConnectedProps } from 'react-redux'
-import { addUserAsync, deleteUserAsync, updateUserAsync } from '../../store/slices/usersSlice';
+import { addUserAsync, deleteUserAsync, uniqueUserByIdSelector, updateUserAsync } from '../../store/slices/usersSlice';
+import { addTaskAsync, deleteTaskAsync, ITask, updateTaskAsync, uniqueTaskByUserIdSelector } from '../../store/slices/taskSlice';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 type State = {
-  user: IUser | null;
   isNew: boolean;
+}
+
+type ParamProp = {
+  id: string;
 }
 
 export class UserDetail extends Component<PropsFromRedux, State> {
@@ -21,8 +27,7 @@ export class UserDetail extends Component<PropsFromRedux, State> {
   constructor(props: PropsFromRedux) {
     super(props);
     this.state = {
-      user: null,
-      isNew: true
+      isNew: true,
     }
     this.nameRef = createRef();
     this.phoneRef = createRef();
@@ -34,24 +39,15 @@ export class UserDetail extends Component<PropsFromRedux, State> {
     const { id } = this.props.match.params as any;
     if (id !== 'new') {
       this.setState({ isNew: false });
-      const user = this.props.users.find(x => x.id === id);
-      if (user) {
-        this.setState({ user: user });
-      }
-
     } else if (id === 'new') {
       this.setState({ isNew: true });
     }
   }
 
-  updateUserState(user: IUser) {
-    this.setState({ user: user });
-  }
-
   handleSubmit = (event: any) => {
     event.preventDefault();
     const model: IUser = {
-      id: this.state.isNew ? uuidv4() : this.state.user?.id || '',
+      id: this.state.isNew ? uuidv4() : this.props.user?.id || '',
       email: this.emailRef.current?.value || '',
       phone: this.phoneRef.current?.value || '',
       name: this.nameRef.current?.value || ''
@@ -70,6 +66,26 @@ export class UserDetail extends Component<PropsFromRedux, State> {
     this.props.history.push('/users');
   }
 
+  deleteTask(id: string): void {
+    this.props.deleteTaskAsync(id);
+  }
+
+  addTask(): void {
+    const taskName = prompt('Task:', 'New task');
+    const model: ITask = {
+      id: uuidv4(),
+      name: taskName || '',
+      userId: this.props.user?.id || ''
+    }
+    this.props.addTaskAsync(model);
+  }
+
+  updateTask(task: ITask): void {
+    const taskName = prompt('Task:', task.name);
+    const model = { ...task, name: taskName || '' };
+    this.props.updateTaskAsync(model);
+  }
+
   render() {
     return (
       <>
@@ -80,21 +96,21 @@ export class UserDetail extends Component<PropsFromRedux, State> {
               <label htmlFor="name">
                 Name:
               </label>
-              <input type="text" defaultValue={this.state.user?.name} name="name" ref={this.nameRef} />
+              <input type="text" defaultValue={this.props.user?.name} name="name" ref={this.nameRef} />
             </div>
 
             <div className="input-group">
               <label htmlFor="phone">
                 Phone:
               </label>
-              <input type="text" defaultValue={this.state.user?.phone} name="phone" ref={this.phoneRef} />
+              <input type="text" defaultValue={this.props.user?.phone} name="phone" ref={this.phoneRef} />
             </div>
 
             <div className="input-group">
               <label htmlFor="email">
                 Email:
               </label>
-              <input type="text" name="email" defaultValue={this.state.user?.email} ref={this.emailRef} />
+              <input type="text" name="email" defaultValue={this.props.user?.email} ref={this.emailRef} />
             </div>
 
             <div className="detail-actions">
@@ -103,25 +119,60 @@ export class UserDetail extends Component<PropsFromRedux, State> {
             </div>
           </form>
         </div>
-
+        {this.state.isNew ? '' :
+          <>
+            <table>
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.props.tasks.map(task =>
+                  <tr key={task.id}>
+                    <td>{task.name}</td>
+                    <td width="100px" >
+                      <div className="action-group">
+                        <Link to={`${this.props.match.url}/${task.id}`}>
+                          <FontAwesomeIcon icon={faEdit} className="btn edit" title="Edit task" onClick={() => this.updateTask(task)} />
+                        </Link>
+                        <FontAwesomeIcon icon={faTrash} className="btn delete" title="Delete task" onClick={() => this.deleteTask(task.id)} />
+                      </div>
+                    </td>
+                  </tr>)}
+              </tbody>
+            </table>
+            <button className="btn add-task-btn" onClick={() => this.addTask()}>Add task</button>
+          </>
+        }
       </>
     )
   }
 }
 
-const mapState = (state: RootState, ownProps: RouteComponentProps) => ({
-  users: state.users.users,
-  match: ownProps.match,
-  history: ownProps.history
-})
+const makeMapState = () => {
+  const taskForCurrentUserIdSelector = uniqueTaskByUserIdSelector();
+  const currentUserSelector = uniqueUserByIdSelector();
+  return (state: RootState, ownProps: RouteComponentProps<ParamProp>) => {
+    const tasks = taskForCurrentUserIdSelector(state.tasks, ownProps.match.params.id)
+    const user = currentUserSelector(state.users, ownProps.match.params.id);
+    const match = ownProps.match;
+    const history = ownProps.history;
+    return { tasks, user, match, history };
+  }
+}
 
 const mapDispatch = {
   deleteUserAsync,
   addUserAsync,
-  updateUserAsync
+  updateUserAsync,
+  addTaskAsync,
+  updateTaskAsync,
+  deleteTaskAsync,
 }
 
-const connector = connect(mapState, mapDispatch);
+const connector = connect(makeMapState, mapDispatch);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 

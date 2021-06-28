@@ -5,7 +5,7 @@ import { Link, RouteComponentProps } from 'react-router-dom'
 import { RootState } from '../../store/store'
 import './user-list.style.css'
 
-import { deleteUserAsync } from '../../store/slices/usersSlice';
+import { deleteUserAsync, uniqueUsersSelector } from '../../store/slices/usersSlice';
 import { connect, ConnectedProps } from 'react-redux'
 
 export class UserList extends Component<PropsFromRedux, any> {
@@ -55,16 +55,20 @@ export class UserList extends Component<PropsFromRedux, any> {
   }
 }
 
-const mapState = (state: RootState, ownProps: RouteComponentProps) => ({
-  users: state.users.users,
-  match: ownProps.match
-})
+const makeMapState = () => {
+  const userSelector = uniqueUsersSelector();
+  return (state: RootState, ownProps: RouteComponentProps) => {
+    const users = userSelector(state.users);
+    const match = ownProps.match;
+    return { users, match };
+  }
+}
 
 const mapDispatch = {
   deleteUserAsync
 }
 
-const connector = connect(mapState, mapDispatch);
+const connector = connect(makeMapState, mapDispatch);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 

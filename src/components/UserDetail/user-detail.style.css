@@ -1,4 +1,4 @@
-.user-detail > form{
+.user-detail>form {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -13,21 +13,29 @@
   margin: 10px 0;
 }
 
-.input-group > label {
+.input-group>label {
   grid-column: 1/2;
 }
 
-.input-group > input {
+.input-group>input {
   grid-column: 2/3;
 }
 
-.detail-actions{
+.detail-actions {
   display: flex;
   justify-content: center;
   width: 100%;
   margin-top: 20px;
 }
 
-.detail-actions > * {
+.detail-actions>* {
   margin: 5px;
+}
+
+table {
+  margin-top: 20px;
+}
+
+.add-task-btn {
+  margin-top: 10px;
 }

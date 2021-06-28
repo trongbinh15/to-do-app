@@ -5,6 +5,7 @@
   align-items: center;
   margin: 0;
   padding: 20px;
+  position: relative;
 }
 
 .container>nav>ul {
@@ -16,7 +17,7 @@
   width: 100%;
 }
 
-.container>nav>ul>li{
+.container>nav>ul>li {
   flex-basis: 100px;
   text-align: center;
 }

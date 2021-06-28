@@ -1,11 +1,11 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import usersReducer from './slices/usersSlice';
-import counterReducer from './slices/counterSlice';
+import tasksReducer from './slices/taskSlice';
 import baseSlice from './slices/baseSlice';
 
 const rootReducer = combineReducers({
 	users: usersReducer,
-	counter: counterReducer,
+	tasks: tasksReducer,
 	base: baseSlice
 });
 

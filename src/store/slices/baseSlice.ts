@@ -1,4 +1,5 @@
-import { createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+import { createSelector, createSlice, isFulfilled, isPending, isRejected } from '@reduxjs/toolkit';
+import { addTaskAsync, deleteTaskAsync, fetchTasksAsync, updateTaskAsync } from './taskSlice';
 import { addUserAsync, deleteUserAsync, fetchUsersAsync, updateUserAsync } from './usersSlice';
 
 type BaseState = {
@@ -20,7 +21,15 @@ const baseSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addMatcher(
-				isPending(fetchUsersAsync, deleteUserAsync, addUserAsync, updateUserAsync),
+				isPending(
+					fetchUsersAsync,
+					deleteUserAsync,
+					addUserAsync,
+					updateUserAsync,
+					fetchTasksAsync,
+					addTaskAsync,
+					updateTaskAsync,
+					deleteTaskAsync),
 				(state) => {
 					state.loading = true;
 					state.error = '';
@@ -28,7 +37,15 @@ const baseSlice = createSlice({
 			)
 
 			.addMatcher(
-				isFulfilled(fetchUsersAsync, deleteUserAsync, addUserAsync, updateUserAsync),
+				isFulfilled(
+					fetchUsersAsync,
+					deleteUserAsync,
+					addUserAsync,
+					updateUserAsync,
+					fetchTasksAsync,
+					addTaskAsync,
+					updateTaskAsync,
+					deleteTaskAsync),
 				(state) => {
 					state.loading = false;
 					state.error = '';
@@ -36,7 +53,16 @@ const baseSlice = createSlice({
 			)
 
 			.addMatcher(
-				isRejected(fetchUsersAsync, deleteUserAsync, addUserAsync, updateUserAsync),
+				isRejected(
+					fetchUsersAsync,
+					deleteUserAsync,
+					addUserAsync,
+					updateUserAsync,
+					fetchTasksAsync,
+					addTaskAsync,
+					updateTaskAsync,
+					deleteTaskAsync
+				),
 				(state, action) => {
 					state.loading = false;
 					state.error = '' + action.payload;
@@ -44,5 +70,10 @@ const baseSlice = createSlice({
 			)
 	}
 });
+
+const loadingSelector = (state: BaseState) => state.loading;
+
+
+export const uniqueLoadingSelector = () => createSelector(loadingSelector, (loading) => loading);
 
 export default baseSlice.reducer;
