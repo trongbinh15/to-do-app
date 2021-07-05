@@ -87,30 +87,32 @@ export class UserDetail extends Component<PropsFromRedux, State> {
   }
 
   render() {
+    const { user, tasks, match } = this.props;
+    const { isNew } = this.state;
     return (
       <>
-        <h1>{this.state.isNew ? 'Add New User' : 'User Detail'}</h1>
+        <h1>{isNew ? 'Add New User' : 'User Detail'}</h1>
         <div className="user-detail">
           <form onSubmit={this.handleSubmit}>
             <div className="input-group">
               <label htmlFor="name">
                 Name:
               </label>
-              <input type="text" defaultValue={this.props.user?.name} name="name" ref={this.nameRef} />
+              <input type="text" defaultValue={user?.name} name="name" ref={this.nameRef} />
             </div>
 
             <div className="input-group">
               <label htmlFor="phone">
                 Phone:
               </label>
-              <input type="text" defaultValue={this.props.user?.phone} name="phone" ref={this.phoneRef} />
+              <input type="text" defaultValue={user?.phone} name="phone" ref={this.phoneRef} />
             </div>
 
             <div className="input-group">
               <label htmlFor="email">
                 Email:
               </label>
-              <input type="text" name="email" defaultValue={this.props.user?.email} ref={this.emailRef} />
+              <input type="text" name="email" defaultValue={user?.email} ref={this.emailRef} />
             </div>
 
             <div className="detail-actions">
@@ -119,7 +121,7 @@ export class UserDetail extends Component<PropsFromRedux, State> {
             </div>
           </form>
         </div>
-        {this.state.isNew ? '' :
+        {isNew ? '' :
           <>
             <table>
               <thead>
@@ -129,12 +131,12 @@ export class UserDetail extends Component<PropsFromRedux, State> {
                 </tr>
               </thead>
               <tbody>
-                {this.props.tasks.map(task =>
+                {tasks.map(task =>
                   <tr key={task.id}>
                     <td>{task.name}</td>
                     <td width="100px" >
                       <div className="action-group">
-                        <Link to={`${this.props.match.url}/${task.id}`}>
+                        <Link to={`${match.url}/${task.id}`}>
                           <FontAwesomeIcon icon={faEdit} className="btn edit" title="Edit task" onClick={() => this.updateTask(task)} />
                         </Link>
                         <FontAwesomeIcon icon={faTrash} className="btn delete" title="Delete task" onClick={() => this.deleteTask(task.id)} />

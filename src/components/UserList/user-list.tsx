@@ -14,12 +14,13 @@ export class UserList extends Component<PropsFromRedux, any> {
   }
 
   render() {
+    const { users, match } = this.props;
     return (
       <>
         <h1>User List</h1>
         <div className="user-list">
           <div className="add-new">
-            <Link to={`${this.props.match.url}/new`}>
+            <Link to={`${match.url}/new`}>
               <button className="btn">Add new</button>
             </Link>
           </div>
@@ -33,14 +34,14 @@ export class UserList extends Component<PropsFromRedux, any> {
               </tr>
             </thead>
             <tbody>
-              {this.props.users.map(user =>
+              {users.map(user =>
                 <tr key={user.id}>
                   <td>{user.name}</td>
                   <td>{user.phone}</td>
                   <td>{user.email}</td>
                   <td width="100px" >
                     <div className="action-group">
-                      <Link to={`${this.props.match.url}/${user.id}`}>
+                      <Link to={`${match.url}/${user.id}`}>
                         <FontAwesomeIcon icon={faEdit} className="btn edit" title="Edit user" />
                       </Link>
                       <FontAwesomeIcon icon={faTrash} className="btn delete" title="Delete user" onClick={() => this.deleteUser(user.id)} />
