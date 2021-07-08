@@ -1,6 +1,5 @@
 import './App.css';
 import { Component } from 'react';
-import ListComponent from './components/List/list';
 import {
   Switch,
   Route,
@@ -9,7 +8,10 @@ import {
 } from "react-router-dom";
 import UserList from './components/UserList/user-list';
 import UserDetail from './components/UserDetail/user-detail';
-class App extends Component {
+import Spinner from './components/Spinner/spinner';
+import { RootState } from './store/store';
+import { connect, ConnectedProps } from 'react-redux';
+class App extends Component<PropsFromRedux> {
   render() {
     return (
       <div className="container">
@@ -19,28 +21,37 @@ class App extends Component {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/list">Todo List</Link>
-            </li>
-            <li>
               <Link to="/users">Users</Link>
             </li>
           </ul>
         </nav>
         <Switch>
-          <Route path="/list" component={ListComponent} />
           <Route exact path="/users" component={UserList} />
           <Route path="/users/:id" component={UserDetail}>
           </Route>
           <Route exact path="/">
-            <Redirect to="/list" />
+            <Redirect to="/users" />
           </Route>
           <Route path="*">
             <h1>Page not found!</h1>
           </Route>
         </Switch>
+        {this.props.isLoading ? <Spinner /> : ''}
       </div>
     );
   };
 }
 
-export default App;
+const mapState = (state: RootState) => {
+  const isLoading = state.base.isLoading;
+  return { isLoading };
+};
+
+const mapDispatch = {
+
+}
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+export default connector(App);

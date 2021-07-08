@@ -1,37 +1,16 @@
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import axios from 'axios'
-import React, { Component } from 'react'
+import { Component } from 'react'
+import { connect, ConnectedProps } from 'react-redux'
 import { Link, RouteComponentProps } from 'react-router-dom'
-import { localApi } from '../../config/api'
+import { ACTIONS } from '../../actions'
 import { IUser } from '../../models/user.model'
+import { RootState } from '../../store/store'
 import './user-list.style.css'
 
-type State = {
-  users: IUser[];
-}
-
-export class UserList extends Component<RouteComponentProps, State> {
-  constructor(props: RouteComponentProps) {
-    super(props);
-    this.state = {
-      users: []
-    }
-  }
-
+export class UserList extends Component<PropsFromRedux> {
   componentDidMount() {
-    axios.get<IUser[]>(localApi.getAllUsers).then(res => {
-      this.setState({ users: res.data })
-    });
-  }
-
-  deleteUser = (id: string) => {
-    axios.delete(localApi.deleteUser.replace('{id}', id)).then(() => {
-      this.setState(prev => ({
-        users: prev.users.filter(u => u.id !== id)
-      }))
-    }
-    )
+    this.props.fetchUsers();
   }
 
   render() {
@@ -54,7 +33,7 @@ export class UserList extends Component<RouteComponentProps, State> {
               </tr>
             </thead>
             <tbody>
-              {this.state.users.map(user =>
+              {this.props.users.map(user =>
                 <tr key={user.id}>
                   <td>{user.name}</td>
                   <td>{user.phone}</td>
@@ -64,7 +43,7 @@ export class UserList extends Component<RouteComponentProps, State> {
                       <Link to={`${this.props.match.url}/${user.id}`}>
                         <FontAwesomeIcon icon={faEdit} className="btn edit" title="Edit user" />
                       </Link>
-                      <FontAwesomeIcon icon={faTrash} className="btn delete" title="Delete user" onClick={() => this.deleteUser(user.id)} />
+                      <FontAwesomeIcon icon={faTrash} className="btn delete" title="Delete user" onClick={() => this.props.deleteUser(user.id)} />
                     </div>
                   </td>
                 </tr>)}
@@ -76,4 +55,20 @@ export class UserList extends Component<RouteComponentProps, State> {
   }
 }
 
-export default UserList
+
+const mapState = (state: RootState, ownProps: RouteComponentProps) => {
+  const users = state.users as IUser[];
+  const match = ownProps.match;
+  return { users, match };
+};
+
+const mapDispatch = {
+  fetchUsers: () => ({ type: ACTIONS.USERS_FETCH }),
+  deleteUser: (id: string) => ({ type: ACTIONS.USER_DELETE, payload: id })
+}
+
+const connector = connect(mapState, mapDispatch);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(UserList);
