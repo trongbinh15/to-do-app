@@ -10,4 +10,8 @@ export const localApi = {
   addTask: "/db_tasks",
   updateTask: "/db_tasks/{id}",
   deleteTask: "/db_tasks/{id}",
+
+
+  login: "/auth?username={username}",
+  signUp: "/auth",
 };

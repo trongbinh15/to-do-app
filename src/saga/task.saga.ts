@@ -9,7 +9,7 @@ function* fetchTasks(): any {
 		yield put({ type: ACTIONS.TASKS_FETCH_SUCCESS, payload: res.data });
 		yield put({ type: ACTIONS.BASE_API_SUCCESS });
 	} catch (error) {
-		yield put({ type: ACTIONS.TASKS_FETCH_FAILED, message: error.message });
+		yield put({ type: ACTIONS.TASKS_FETCH_FAILED });
 		yield put({ type: ACTIONS.BASE_API_FAILED, payload: error.message });
 	}
 }

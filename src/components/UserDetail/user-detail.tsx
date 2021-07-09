@@ -35,7 +35,6 @@ export class UserDetail extends Component<PropsFromRedux, State> {
   }
 
   componentDidMount() {
-    console.log(this.props)
     const { id } = this.props.match.params as any;
     if (id !== 'new') {
       this.setState({ isNew: false });

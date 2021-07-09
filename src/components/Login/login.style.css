@@ -1,0 +1,33 @@
+.sign-form>form {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.input-group {
+  display: grid;
+  place-items: center;
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: auto;
+  margin: 10px 0;
+}
+
+.input-group>label {
+  grid-column: 1/2;
+}
+
+.input-group>input {
+  grid-column: 2/3;
+}
+
+.sign-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.sign-actions>* {
+  margin: 5px;
+}

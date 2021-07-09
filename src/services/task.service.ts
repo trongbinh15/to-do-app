@@ -6,7 +6,6 @@ export const fetchTaskAPI = () => {
 	return axios.get<ITask[]>(localApi.getAllTasks);
 }
 
-
 export const deleteTaskAPI = (id: string) => {
 	return axios.delete(localApi.deleteTask.replace('{id}', id));
 }

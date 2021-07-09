@@ -16,11 +16,21 @@
   width: 100%;
 }
 
-.container>nav>ul>li{
+.container>nav>ul>li {
   flex-basis: 100px;
   text-align: center;
 }
 
 ul {
   list-style-type: none;
+}
+
+ul>li:last-child {
+  display: flex;
+  margin-left: auto;
+  flex-basis: 200px !important;
+}
+
+ul>li:last-child>* {
+  margin-right: 5px;
 }

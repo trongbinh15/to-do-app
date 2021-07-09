@@ -11,29 +11,14 @@
       "userId": "03"
     },
     {
-      "id": "d321041b-e905-45ba-afa8-d4d2e3c59536",
-      "name": "New task 2",
-      "userId": "03"
-    },
-    {
-      "id": "0a1913b1-ea63-4a41-bbbb-3eb1264802f9",
-      "name": "New task",
-      "userId": "03"
-    },
-    {
       "id": "079ce77c-b1c4-47e8-a23d-8e9966d8f410",
-      "name": "New task",
+      "name": "New task 222",
       "userId": "02"
     },
     {
       "id": "4fa6ac03-cce0-44fb-a4f9-757e52bd895d",
       "name": "New task22",
       "userId": "02"
-    },
-    {
-      "id": "11c6bb9d-51d0-4125-8eb1-231df1c468f6",
-      "name": "111111",
-      "userId": "03"
     },
     {
       "id": "7f6a0be1-e2b4-4e31-9db0-7e2498a503fa",
@@ -44,6 +29,11 @@
       "id": "91723737-e5eb-4586-bdd1-c5c29bfb757e",
       "name": "WWW",
       "userId": "d7f4918d-fec7-4b1b-836a-549f2fa290bd"
+    },
+    {
+      "id": "4daf68a1-106a-46a3-a308-028f1d7d2325",
+      "name": "New task",
+      "userId": "02"
     }
   ],
   "db_users": [
@@ -65,5 +55,9 @@
       "phone": "+84359984971",
       "name": "Binh Nguyen Trong"
     }
-  ]
+  ],
+  "auth": {
+    "username": "test",
+    "password": "1234"
+  }
 }

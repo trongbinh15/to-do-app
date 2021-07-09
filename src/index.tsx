@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
+import setupInterceptorAxios from './axios';
+
+setupInterceptorAxios();
 
 ReactDOM.render(
   <React.StrictMode>

@@ -11,6 +11,7 @@ import './user-list.style.css'
 export class UserList extends Component<PropsFromRedux> {
   componentDidMount() {
     this.props.fetchUsers();
+    this.props.fetchTasks();
   }
 
   render() {
@@ -64,6 +65,7 @@ const mapState = (state: RootState, ownProps: RouteComponentProps) => {
 
 const mapDispatch = {
   fetchUsers: () => ({ type: ACTIONS.USERS_FETCH }),
+  fetchTasks: () => ({ type: ACTIONS.TASKS_FETCH }),
   deleteUser: (id: string) => ({ type: ACTIONS.USER_DELETE, payload: id })
 }
 
