@@ -5,5 +5,5 @@ export interface IAuthModel {
 
 export interface AuthState {
 	isAuthenticated: boolean;
-	username: string;
+	token: string;
 }

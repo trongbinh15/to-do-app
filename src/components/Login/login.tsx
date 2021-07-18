@@ -1,12 +1,11 @@
 import './login.style.css';
-import React, { Component, createRef } from 'react'
+import React, { Component, createRef } from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RootState } from '../../store/store';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { ACTIONS } from '../../actions';
 
 export class Login extends Component<PropsFromRedux> {
-
 	usernameRef: React.RefObject<HTMLInputElement>;
 	passwordRef: React.RefObject<HTMLInputElement>;
 
@@ -19,9 +18,12 @@ export class Login extends Component<PropsFromRedux> {
 	handleSubmit = (event: any) => {
 		event.preventDefault();
 		if (this.usernameRef.current?.value && this.passwordRef.current?.value) {
-			this.props.login(this.usernameRef.current.value, this.passwordRef.current.value);
+			this.props.login(
+				this.usernameRef.current.value,
+				this.passwordRef.current.value,
+			);
 		}
-	}
+	};
 
 	render() {
 		if (this.props.isAuthenticated) {
@@ -33,16 +35,12 @@ export class Login extends Component<PropsFromRedux> {
 					<div className="login-form">
 						<form onSubmit={this.handleSubmit}>
 							<div className="input-group">
-								<label htmlFor="name">
-									Username:
-								</label>
+								<label htmlFor="name">Username:</label>
 								<input type="text" name="name" ref={this.usernameRef} />
 							</div>
 
 							<div className="input-group">
-								<label htmlFor="phone">
-									Password:
-								</label>
+								<label htmlFor="phone">Password:</label>
 								<input type="text" name="phone" ref={this.passwordRef} />
 							</div>
 
@@ -52,7 +50,7 @@ export class Login extends Component<PropsFromRedux> {
 						</form>
 					</div>
 				</>
-			)
+			);
 		}
 	}
 }
@@ -63,13 +61,13 @@ const mapState = (state: RootState) => {
 };
 
 const mapDispatch = {
-	login: (username: string, password: string) => ({ type: ACTIONS.AUTH_LOGIN, payload: { username, password } }),
-}
+	login: (username: string, password: string) => ({
+		type: ACTIONS.AUTH_LOGIN,
+		payload: { username, password },
+	}),
+};
 
 const connector = connect(mapState, mapDispatch);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 export default connector(Login);
-
-
-

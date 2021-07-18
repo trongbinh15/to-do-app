@@ -1,5 +1,5 @@
 import { ACTIONS } from '../actions';
-import { IUser } from '../models/user.model'
+import { IUser } from '../models/user.model';
 
 export default function users(state: IUser[] = [], action: any) {
 	switch (action.type) {
@@ -8,12 +8,14 @@ export default function users(state: IUser[] = [], action: any) {
 		case ACTIONS.USERS_FETCH_FAILED:
 			return [];
 		case ACTIONS.USER_DELETE_SUCCESS:
-			return state.filter(u => u.id !== action.payload);
+			return state.filter((u) => u.id !== action.payload);
 		case ACTIONS.USER_UPDATE_SUCCESS:
-			return state.map(u => u.id === action.payload.id ? action.payload : u);
+			return state.map((u) =>
+				u.id === action.payload.id ? action.payload : u,
+			);
 		case ACTIONS.USER_ADD_SUCCESS:
 			return [...state, action.payload];
 		default:
-			return state
+			return state;
 	}
 }

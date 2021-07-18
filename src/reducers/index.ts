@@ -8,5 +8,5 @@ export default combineReducers({
 	users,
 	tasks,
 	auth,
-	base
+	base,
 });

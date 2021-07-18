@@ -1,0 +1,6 @@
+*.svg
+*.css
+*.json
+.vscode
+build/*
+.eslintrc.js
