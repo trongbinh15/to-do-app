@@ -27,7 +27,7 @@
     },
     {
       "id": "6d38771d-6940-4d9a-977a-129e0019d638",
-      "name": "B",
+      "name": "aaaa",
       "userId": "aed63442-d031-4a31-8017-768893822b70"
     },
     {
@@ -49,6 +49,11 @@
       "id": "05c2d189-f40e-4b6e-b8ab-81c2085aec2b",
       "name": "New task",
       "userId": "e653efc2-b680-4b52-ac83-4d8c4430cffc"
+    },
+    {
+      "id": "7c13ea9b-8176-4574-a42a-9ffb8974ef7e",
+      "name": "New task",
+      "userId": "aed63442-d031-4a31-8017-768893822b70"
     }
   ],
   "db_users": [
@@ -56,19 +61,13 @@
       "id": "aed63442-d031-4a31-8017-768893822b70",
       "email": "trongbinhnguyen15@gmail.com",
       "phone": "32432",
-      "name": "TGA"
+      "name": "TGA#"
     },
     {
       "id": "452a2a7a-07a0-4ac1-a476-3ad7a21b2269",
       "email": "trongbinhnguyen15@gmail.com",
-      "phone": "059",
+      "phone": "0595",
       "name": "TEY"
-    },
-    {
-      "id": "e653efc2-b680-4b52-ac83-4d8c4430cffc",
-      "email": "Binh.NguyenTrong8@Nashtechglobal.com",
-      "phone": "+84359984971",
-      "name": "Nguyen Trong Binh"
     }
   ]
 }
